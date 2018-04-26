@@ -1,0 +1,136 @@
+body {
+  margin:0;
+  padding:0;
+}
+
+.wrap {
+  display:flex;
+}
+
+.leftcol {
+  /*flex:1;*/
+  /*max-width:300px;*/
+  border-right:1px solid grey;
+  /*overflow-x:scroll;*/
+  overflow-y:scroll;
+  padding-right:1em;
+  /*height:100vh;*/
+}
+
+/*.leftcol a {*/
+  /*display:block;*/
+/*}*/
+
+.leftcol a.active {
+  font-weight:bold;
+}
+
+.middlecol {
+  flex:1;
+  overflow-x:scroll;
+  overflow-y:scroll;
+  /*height:100vh;*/
+}
+
+{{ pygments_style }}
+
+pre {
+  margin:0;
+}
+
+.highlight .line {
+  display:table-row;
+}
+
+.highlight .line.has_comment {
+  background-color:#f7f7b8;
+}
+
+
+.highlight .line > span.lineno {
+  padding-right:1rem;
+}
+
+.highlight .line > span.code {
+  padding-right:1rem;
+  min-width:40em;
+}
+
+.highlight .line > span.comment {
+  overflow-x:scroll;
+}
+
+.highlight .line > span {
+  display:table-cell;
+  vertical-align:middle;
+}
+
+.highlight .line pre {
+  display:inline;
+}
+
+.highlight span.code > pre {
+  white-space:pre-wrap;
+}
+
+nav ul {
+  -webkit-padding-start:0;
+  /*padding-left:1em;*/
+  list-style-type:none;
+
+}
+
+nav ul li {
+  padding-left: 0.3em;
+}
+
+nav ul li.dir:before {
+  content: "›";
+}
+
+nav ul li.file:before {
+  content: "•";
+  display: inline;
+}
+
+
+header h1, header h2, header h3 {
+    display: inline-block;
+    margin:0.3em 0em;
+}
+
+header {
+    background-color: #2f2f2f;
+    color: #fff;
+    padding: 0 2em;
+    display: flex;
+    align-items: center;
+}
+
+header a{
+  color:inherit;
+  text-decoration:none;
+}
+
+header h3 {
+    text-align: right;
+}
+
+header h3 {flex: 1;}
+
+header h1 {
+    padding-right: 2em;
+}
+
+a {
+    color:#03A9F4;
+}
+
+
+.index {
+  padding:5em 2em;
+}
+
+.index table {
+  margin:0 auto;
+}

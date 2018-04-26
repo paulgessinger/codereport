@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{% block title %}{% endblock %} - {{ title }}</title>
+    <style>
+      {% include "style.css" %}
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1><a href="index.html">{{ title }}</a></h1>
+      {% block header %}
+      {% endblock %}
+      <h3>generated at {{ report_created }}</h3>
+    </header>
+
+    {% block main %}
+    <div class="wrap">
+      <div class="leftcol">
+        {#
+        {% block leftcol %}
+        {% endblock %}
+        {% for file, slug, active in files %}
+        <a href="./{{ slug }}" class="{{ "active" if active else "" }}">{{ file }}</a>
+        {% endfor %}
+        #}
+
+
+        <nav>
+          <ul class="sitemap">
+          {%- for node in filetree recursive %}
+              <li class="dir">
+              {{ node.name }}/
+              <ul>
+              {% if node.subdirs|length > 0 %}
+                {{ loop(node.subdirs) }}
+              {% endif %}
+              
+              {% for file, slug in node.files %}
+              <li class="file">
+                {% set active = "active" if slug == active_file else "" %}
+                <a href="{{ slug }}" class="{{ active }}">{{ file }}</a>
+              </li>
+              {% endfor %}
+              </ul>
+              </li>
+          {%- endfor %}
+          </ul>
+        </nav>
+      </div>
+      <div class="middlecol">
+        {% block middlecol %}
+        {% endblock %}
+      </div>
+    </div>
+    {% endblock %}
+  </body>
+</html>

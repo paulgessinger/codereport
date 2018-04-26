@@ -1,0 +1,27 @@
+{% extends "main.html" %}
+
+{% block title %}
+Overview
+{% endblock %}
+
+{% block header %}
+<h2>Overview</h2>
+{% endblock %}
+
+{% block main %}
+<div class="index">
+
+<table>
+{% for file, nitems, link in files %}
+<tr>
+  <td><a href="{{link}}">{{ file }}</a></td>
+  <td>
+    {{ nitems }} item{{ "" if nitems == 1 else "s" }}
+  </td>
+</tr>
+{% endfor %}
+</table>
+
+</div>
+
+{% endblock %}
