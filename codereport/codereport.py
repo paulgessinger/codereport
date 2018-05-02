@@ -21,10 +21,11 @@ class TreeNode:
         return "Node("+self.name+": "+repr((self.subdirs, self.files))+")"
 
 class CodeReport:
-    def __init__(self, files, get_comment, title="Code Report"):
+    def __init__(self, files, get_comment, encoding="utf-8", title="Code Report"):
         self._files = files
         self._get_comment = get_comment
         self._title = title
+        self._encoding = encoding
 
     def files(self):
         self._file_item_counts = {}
@@ -52,7 +53,7 @@ class CodeReport:
 
         files = reversed(sorted(files, key=lambda f: f[1]))
 
-        return indextpl.render(files=files,
+        return index_tpl.render(files=files,
                                title=self._title)
 
     def _make_file_tree(self):
@@ -92,7 +93,7 @@ class CodeReport:
 
         filetree = self._make_file_tree()
 
-        with open(f, "r") as fh:
+        with open(f, "r", encoding=self._encoding) as fh:
             raw_content = fh.read()
 
         try:
@@ -111,7 +112,7 @@ class CodeReport:
         code = highlight(raw_content, lexer, HtmlFormatter(get_comment))
 
 
-        return filetpl.render(filetree=filetree,
+        return file_tpl.render(filetree=filetree,
                               active_file=self._make_filename(f),
                               filename=f,
                               code=code,

@@ -10,7 +10,7 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
 
 setup(
     name='codereport',
-    version='0.1.1',
+    version='0.1.2',
     description='Make annotated code reports',
     url='https://github.com/paulgessinger/codereport',
     license='MIT',
