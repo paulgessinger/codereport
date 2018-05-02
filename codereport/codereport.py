@@ -22,21 +22,30 @@ class TreeNode:
 
 class CodeReport:
     def __init__(self, files, get_comment, encoding="utf-8", title="Code Report"):
-        self._files = files
+        self._files = list(map(lambda s: re.sub(r"//+", "/", s), files))
+        self._common_prefix = os.path.commonprefix(self._files)
         self._get_comment = get_comment
         self._title = title
         self._encoding = encoding
 
+    def _normalize(self, path):
+        return path.replace(self._common_prefix, "")
+
     def files(self):
         self._file_item_counts = {}
 
-        for f in self._files:
-            self._file_item_counts[f] = 0
-            yield self._make_filename(f), self._process_file(f)
+        common_prefix = os.path.commonprefix(self._files)
+        
+        reportfiles = map(lambda s: (self._normalize(s), s), self._files)
+
+        for dest, src in reportfiles:
+            self._file_item_counts[src] = 0
+            yield self._make_filename(dest), self._process_file(src)
 
         yield "index.html", self._make_index()
 
     def get_file_link(self, file, line=0, col=0):
+        file = self._normalize(file)
         if line == 0 and col == 0:
             return self._make_filename(file)
         return "{}#L{}".format(self._make_filename(file), line)
@@ -57,9 +66,8 @@ class CodeReport:
                                title=self._title)
 
     def _make_file_tree(self):
-        common_prefix = os.path.commonprefix(self._files)
 
-        files_sorted = map(lambda s: re.sub(r"//+", "/", s.replace(common_prefix, "")), sorted(self._files))
+        files_sorted = map(self._normalize, sorted(self._files))
         files_sorted = [(s.split(os.sep), s) for s in files_sorted]
 
         return [self._rec_group(".", files_sorted)]
