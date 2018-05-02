@@ -1,0 +1,12 @@
+<span id="L{{ lineno }}" class="line{%- if cls != "" %}
+ {{ cls }}
+{%- endif %}">
+  <span class="lineno"><pre>{{ "% 4d" | format(lineno) }}</pre></span>
+  <span class="code">
+    <pre{%- if style != "" %}
+    style="{{ style }}"
+    {%- endif %}>{{ code }}</pre>
+  </span>
+  <span class="comment">{{ comment if comment else "" }}</span>
+</span>
+
