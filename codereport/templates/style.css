@@ -23,6 +23,7 @@ body {
 
 .leftcol a.active {
   font-weight:bold;
+  color:orange;
 }
 
 .middlecol {

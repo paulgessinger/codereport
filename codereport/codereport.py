@@ -121,7 +121,7 @@ class CodeReport:
 
 
         return file_tpl.render(filetree=filetree,
-                              active_file=self._make_filename(f),
+                              active_file=self._make_filename(self._normalize(f)),
                               filename=f,
                               code=code,
                               title=self._title)
