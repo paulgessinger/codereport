@@ -21,21 +21,21 @@ class TreeNode:
         return "Node("+self.name+": "+repr((self.subdirs, self.files))+")"
 
 class CodeReport:
-    def __init__(self, files, get_comment, encoding="utf-8", title="Code Report"):
+    def __init__(self, files, get_comment, encoding="utf-8", title="Code Report", commonprefix=os.path.commonprefix):
         self._files = list(map(lambda s: re.sub(r"//+", "/", s), files))
-        self._common_prefix = os.path.commonprefix(self._files)
+        self._common_prefix = commonprefix(self._files)
         self._get_comment = get_comment
         self._title = title
         self._encoding = encoding
 
     def _normalize(self, path):
-        return path.replace(self._common_prefix, "")
+        if path.startswith(self._common_prefix):
+            return path[len(self._common_prefix):]
+        return path
 
     def files(self):
         self._file_item_counts = {}
 
-        common_prefix = os.path.commonprefix(self._files)
-        
         reportfiles = map(lambda s: (self._normalize(s), s), self._files)
 
         for dest, src in reportfiles:
@@ -57,7 +57,7 @@ class CodeReport:
     def _make_index(self):
         files = []
         for k, v in self._file_item_counts.items():
-            files.append((k, v, self.get_file_link(k)))
+            files.append((self._normalize(k), v, self.get_file_link(k)))
 
 
         files = reversed(sorted(files, key=lambda f: f[1]))
