@@ -85,11 +85,11 @@ nav ul li {
 }
 
 nav ul li.dir:before {
-  content: "›";
+  content: "\203A";
 }
 
 nav ul li.file:before {
-  content: "•";
+  content: "\2022";
   display: inline;
 }
 
