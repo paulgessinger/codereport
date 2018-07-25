@@ -10,6 +10,34 @@ Overview
 
 {% block main %}
 <div class="index">
+  
+  <div class="wrap">
+    <div class="leftcol">
+      <nav>
+        <ul class="sitemap">
+          {%- for node in nodelist recursive %}
+          <li class="{{"dir" if node.is_dir else "file"}}">
+            {%- if node.is_file %}
+            <a href="{{node.srcfile.report_file_name}}">{{ node.name }}</a>
+            ({{ node.count_items() }})
+            {%- endif %}
+            {%- if node.is_dir %}
+            {{ node.name }} ({{ node.count_items() }}) 
+            <ul>
+              {{ loop(node.children) }}
+            </ul>
+            {%- endif %}
+          </li>
+          {%- endfor %}
+        </ul>
+      </nav>
+    </div>
+    <div class="middlecol">
+      {% block middlecol %}
+      {{ summary }}
+      {% endblock %}
+    </div>
+  </div>
 
 <table>
 {% for file, nitems, link in files %}

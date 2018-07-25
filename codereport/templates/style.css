@@ -8,18 +8,10 @@ body {
 }
 
 .leftcol {
-  /*flex:1;*/
-  /*max-width:300px;*/
   border-right:1px solid grey;
-  /*overflow-x:scroll;*/
   overflow-y:scroll;
   padding-right:1em;
-  /*height:100vh;*/
 }
-
-/*.leftcol a {*/
-  /*display:block;*/
-/*}*/
 
 .leftcol a.active {
   font-weight:bold;
@@ -39,6 +31,11 @@ pre {
   margin:0;
 }
 
+.highlight {
+  width:100%;
+  display:table;
+}
+
 .highlight .line {
   display:table-row;
 }
@@ -50,6 +47,7 @@ pre {
 
 .highlight .line > span.lineno {
   padding-right:1rem;
+  width:3em;
 }
 
 .highlight .line > span.code {
@@ -76,7 +74,7 @@ pre {
 
 nav ul {
   -webkit-padding-start:0;
-  /*padding-left:1em;*/
+  padding-left:1em;
   list-style-type:none;
 
 }
@@ -101,8 +99,8 @@ header h1, header h2, header h3 {
 }
 
 header {
-    background-color: #2f2f2f;
-    color: #fff;
+    color: #2f2f2f;
+    border-bottom:#222222 solid 1px;
     padding: 0 2em;
     display: flex;
     align-items: center;
@@ -129,9 +127,32 @@ a {
 
 
 .index {
-  padding:5em 2em;
 }
 
-.index table {
-  margin:0 auto;
+/*.index table {*/
+  /*margin:0 auto;*/
+/*}*/
+
+.summary {
+  padding:1em;
+}
+
+.summary table {
+  width:100%;
+  border:1px solid #222222;
+  border-collapse: collapse;
+}
+
+.summary table th {
+  text-align:left;
+  padding:0.4em;
+}
+
+.summary table td {
+  border:1px solid #222222;
+  padding:0.4em;
+  vertical-align:top;
+}
+
+.summary table td:last-child {
 }

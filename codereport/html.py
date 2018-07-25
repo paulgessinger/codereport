@@ -8,7 +8,7 @@ def get_style():
 class HtmlFormatter(VanillaHtmlFormatter):
     def __init__(self,  get_line_comment, *args, **kwargs):
         self._get_line_comment = get_line_comment
-        super().__init__(*args, **kwargs)
+        super(HtmlFormatter, self).__init__(*args, **kwargs)
 
     def wrap(self, source, outfile):
         return self._wrap_div(self._wrap_lines(source))

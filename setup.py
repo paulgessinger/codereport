@@ -8,6 +8,9 @@ here = path.abspath(path.dirname(__file__))
 with open(path.join(here, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
+with open("codereport/requirements.txt") as f:
+    deps = f.readlines()
+
 setup(
     name='codereport',
     version='0.1.6',
@@ -24,6 +27,10 @@ setup(
         'codereport': ['templates/*'],
     },
 
-    install_requires=['jinja2', 'python-slugify', 'Pygments'],
+    entry_points = {
+        'console_scripts': ["codereport=codereport.cli:main"]
+    },
+
+    install_requires=[deps],
     tests_require = ['pytest', 'mock']
 )

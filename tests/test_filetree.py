@@ -1,9 +1,10 @@
-from codereport.filetree import make_file_tree
+from codereport.filetree import make_file_tree, SourceFile
+
 
 def test_make_file_tree():
     files = ["./a/b/c/d.cpp", "./a/b/../b/c/e.cpp", "./a/./b/f.cpp", "./d.cpp"]
 
-    tree = make_file_tree(files)
+    tree = make_file_tree([SourceFile(f) for f in files])
 
     nodelist = list(tree.walk())
 
@@ -30,3 +31,7 @@ def test_make_file_tree():
         assert len(list(node.children)) == ref["nch"]
         assert node.path == ref["path"]
 
+def test_sourcefile():
+    f = "a/b/c.cpp"
+    sf = SourceFile(f)
+    assert sf.report_file_name == "a_b_c.cpp.html"
