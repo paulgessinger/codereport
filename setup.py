@@ -8,12 +8,12 @@ here = path.abspath(path.dirname(__file__))
 with open(path.join(here, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
-with open("codereport/requirements.txt") as f:
+with open(path.join(here, "codereport/requirements.txt")) as f:
     deps = f.readlines()
 
 setup(
     name='codereport',
-    version='0.1.6',
+    version='0.2.2',
     description='Make annotated code reports',
     url='https://github.com/paulgessinger/codereport',
     license='MIT',
@@ -24,7 +24,7 @@ setup(
 
     packages=find_packages(exclude=[]),
     package_data={
-        'codereport': ['templates/*'],
+        'codereport': ['templates/*', "requirements.txt"],
     },
 
     entry_points = {
