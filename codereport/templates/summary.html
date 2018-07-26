@@ -1,0 +1,58 @@
+<div class="summary">
+  <table>
+  {% if not single_file %}
+
+    <thead>
+      <tr>
+        <th>type</th>
+        <th>severity</th>
+        <th>no. of occurrences</th>
+        <th>lines</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for code, items in by_code.items() %}
+      <tr>
+        <td>{{code}}</td>
+        <td>{{ items[0].severity }}</td>
+        <td>{{ items|length}}</td>
+        <td>
+          {%- for item in items|sort(attribute='line') %}
+          <a href="#L{{ item.line }}">#{{ item.line }}</a>
+          {%- endfor %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+
+  {% else %}
+
+    <thead>
+      <tr>
+        <th>type</th>
+        <th>severity</th>
+        <th>no. of occurrences</th>
+        <th>files affected</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for code, items in by_code.items() %}
+      <tr>
+        <td>{{code}}</td>
+        <td>{{ items[0].severity }}</td>
+        <td>{{ items|length}}</td>
+        <td>
+        {%- for file in items|map(attribute='srcfile')|unique %}
+        <a href="{{ file.report_file_name }}">{{ file.path }}</a>
+        {%- if not loop.last %}
+        <br/>
+        {%- endif %}
+        {%- endfor %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  {% endif %}
+
+  </table>
+</div>

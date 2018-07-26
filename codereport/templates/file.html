@@ -1,13 +1,16 @@
 {% extends "main.html" %}
 
 {% block title %}
-{{ filename }}
+{{ srcfile.path }}
 {% endblock %}
 
 {% block header %}
-<h2>{{ filename }}</h2>
+<h2>{{ srcfile.path }}</h2>
 {% endblock %}
 
-{% block middlecol %}
+{% block main %}
+
+{{ summary }}
+
 {{ code }}
 {% endblock %}
