@@ -1,5 +1,12 @@
 import os
 
+def psplit(p):
+    if p.startswith("/"):
+        node, other = p[1:].split("/", 1)
+        return node, other
+    else:
+        return p.split("/", 1)
+
 class TreeNode:
     def __init__(self, parent=None):
         self.parent = parent
@@ -8,7 +15,7 @@ class TreeNode:
 
     def attach(self, path, srcfile):
         # print("attach", self.name, path)
-        parts = path.split("/", 1)
+        parts = psplit(path)
         if len(parts) == 1:
             # print(" => file")
             self.files.append(FileNode(srcfile, parent=self))
@@ -106,15 +113,18 @@ class SourceFile:
 
     @property
     def report_file_name(self):
-        return self.path.replace("/", "_")+".html"
+        p = self.path
+        if p.startswith("/"):
+            p = p[1:]
+        return p.replace("/", "_")+".html"
 
 def make_file_tree(files):
-    root_name, _ = files[0].path.split("/", 1)
+    root_name, _ = psplit(files[0].path)
     root = DirNode(root_name)
 
     for f in files:
         # print(f.path, f.raw_path)
-        parts = f.path.split("/", 1)
+        parts = psplit(f.path)
         if len(parts) == 1:
             root.attach(parts[0], f)
         else:
