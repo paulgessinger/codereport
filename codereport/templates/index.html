@@ -14,7 +14,7 @@ Overview
   <div class="wrap">
     <div class="leftcol">
       <nav>
-        <ul class="sitemap">
+        <ul class="sitemap tree">
           {%- for node in nodelist recursive %}
           <li class="{{"dir" if node.is_dir else "file"}}">
             {%- if node.is_file %}

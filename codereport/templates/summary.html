@@ -1,3 +1,8 @@
+{% if standalone %}
+{% extends "base.html" %}
+{% endif %}
+
+{% block body %}
 <div class="summary">
   <table>
   {% if not single_file %}
@@ -56,3 +61,4 @@
 
   </table>
 </div>
+{% endblock %}

@@ -51,6 +51,9 @@ class CodeReport:
 
         with self._destfs.open(os.path.join(destdir, "index.html"), "w+") as f:
             f.write(self._render_index())
+        
+        with self._destfs.open(os.path.join(destdir, "index_summary.html"), "w+") as f:
+            f.write(self._render_summary(self._items, standalone=True))
 
     def _render_code_file(self, srcfile):
         with self._srcfs.open(srcfile.raw_path, "r") as fh:
@@ -85,7 +88,7 @@ class CodeReport:
                                 summary=self._render_summary(self._items),
                                 title=self._title)
 
-    def _render_summary(self, items):
+    def _render_summary(self, items, standalone=False):
         kf = lambda i: i.code
         by_code = {}
         for item in items:
@@ -98,70 +101,7 @@ class CodeReport:
         files = set([i.path for i in items])
 
         return summary_tpl.render(by_code=by_code,
+                                  standalone=standalone,
                                   single_file=len(files) > 1)
 
 
-    # def _report_file_name(self, file):
-
-    # def files(self):
-        # self._file_item_counts = {}
-
-        # reportfiles = map(lambda s: (self._normalize(s), s), self._files)
-
-        # for dest, src in reportfiles:
-            # self._file_item_counts[src] = 0
-            # yield self._make_filename(dest), self._process_file(src)
-
-        # yield "index.html", self._make_index()
-
-    # def get_file_link(self, file, line=0, col=0):
-        # file = self._normalize(file)
-        # if line == 0 and col == 0:
-            # return self._make_filename(file)
-        # return "{}#L{}".format(self._make_filename(file), line)
-
-    # def _make_filename(self, filename):
-        # return "{}.html".format(slugify(filename))
-
-
-    # def _make_index(self):
-        # files = []
-        # for k, v in self._file_item_counts.items():
-            # files.append((self._normalize(k), v, self.get_file_link(k)))
-
-
-        # files = reversed(sorted(files, key=lambda f: f[1]))
-
-        # return index_tpl.render(files=files,
-                               # title=self._title)
-
-    # def _process_file(self, f):
-
-        # filetree = self._make_file_tree()
-
-        # with open(f, "r", encoding=self._encoding) as fh:
-            # raw_content = fh.read()
-
-        # try:
-            # lexer = guess_lexer_for_filename(f, raw_content)
-        # except pygments.util.ClassNotFound:
-            # if f.endswith(".ipp"):
-                # lexer = CppLexer()
-
-        # def get_comment(lineno):
-            # msgs = self._get_comment(f, lineno, self)
-            # if msgs is not None:
-                # self._file_item_counts[f] += len(msgs)
-                # return "\n".join(msgs)
-            # return None
-
-        # code = highlight(raw_content, lexer, HtmlFormatter(get_comment))
-
-
-        # return file_tpl.render(filetree=filetree,
-                              # active_file=self._make_filename(self._normalize(f)),
-                              # filename=f,
-                              # code=code,
-                              # title=self._title)
-    # def __iter__(self):
-        # return self.files()
