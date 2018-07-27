@@ -13,7 +13,7 @@ with open(path.join(here, "codereport/requirements.txt")) as f:
 
 setup(
     name='codereport',
-    version='0.2.2',
+    version='0.2.3',
     description='Make annotated code reports',
     url='https://github.com/paulgessinger/codereport',
     license='MIT',
