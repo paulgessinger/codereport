@@ -25,6 +25,8 @@ def report_from_json(item_file, dest, title, srcfs = None,
     report_items = make_report_items(data, path_resolver)
     report_items = list(filter(lambda s: os.path.exists(s.path), report_items))
 
+    assert len(report_items) > 0, "No existing files found"
+
     prefix = prefix or os.path.commonprefix([s.path for s in report_items])
 
     cp = CodeReport(report_items,

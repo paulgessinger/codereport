@@ -32,8 +32,8 @@ void main() {
 
 
 def test_create():
-    # fs = MemoryFS()
-    fs = OSFS("/tmp/cprtest")
+    fs = MemoryFS()
+    # fs = OSFS("/tmp/cprtest")
     fs.makedir("src", recreate=True)
     fs.settext("src/myclass.h", file_a.strip())
     fs.settext("src/myclass.cxx", file_b.strip())

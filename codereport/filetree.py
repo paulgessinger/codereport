@@ -31,7 +31,7 @@ class TreeNode:
         if self.parent is not None:
             return os.path.join(self.parent.path, self.name)
         else:
-            return self.name
+            return ""
 
     def walk(self):
         yield self
@@ -118,16 +118,16 @@ class SourceFile:
             p = p[1:]
         return p.replace("/", "_")+".html"
 
-def make_file_tree(files):
-    root_name, _ = psplit(files[0].path)
+def make_file_tree(files, root_name = "root"):
+    # root_name, _ = psplit(files[0].path)
     root = DirNode(root_name)
 
     for f in files:
-        # print(f.path, f.raw_path)
-        parts = psplit(f.path)
-        if len(parts) == 1:
-            root.attach(parts[0], f)
-        else:
-            node, other = parts
-            root.attach(other, f)
+        root.attach(f.path, f)
+        # parts = psplit(f.path)
+        # if len(parts) == 1:
+            # root.attach(parts[0], f)
+        # else:
+            # node, other = parts
+            # root.attach(other, f)
     return root
