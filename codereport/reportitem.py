@@ -35,7 +35,10 @@ class ReportItem:
         }
 
     def __hash__(self):
-        return hash((self.path, self.line, self.col))
+        return hash((self.path, self.line, self.col, self.code))
 
     def __eq__(self, o):
-        return self.path == o.path and self.line == o.line and self.col == o.col
+        return (self.path == o.path
+                and self.line == o.line
+                and self.col == o.col
+                and self.code = o.code)
