@@ -41,4 +41,4 @@ class ReportItem:
         return (self.path == o.path
                 and self.line == o.line
                 and self.col == o.col
-                and self.code = o.code)
+                and self.code == o.code)
