@@ -1,0 +1,28 @@
+{% extends "main.html" %}
+
+{% block title %}
+{{ code }}
+{% endblock %}
+
+{% block header %}
+<h2>{{ code }}</h2>
+{% endblock %}
+
+{% block main %}
+
+{% for srcfile, items in data %}
+<h3 id="{{ srcfile.report_file_name }}"><a href="{{ srcfile.report_file_name }}">{{ srcfile.path }}</a></h3>
+
+{% for source in items %}
+
+{% if loop.index > 1 %}
+<hr>
+{% endif %}
+
+{{ source }}
+
+{% endfor %}
+
+{% endfor %}
+
+{% endblock %}

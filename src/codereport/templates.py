@@ -4,7 +4,7 @@ from datetime import datetime
 
 
 env = Environment(
-    loader=PackageLoader('codereport', 'templates'),
+    loader=PackageLoader("codereport", "templates"),
 )
 
 env.globals["pygments_style"] = get_style()
@@ -14,3 +14,4 @@ file_tpl = env.get_template("file.html")
 index_tpl = env.get_template("index.html")
 line_tpl = env.get_template("line.html")
 summary_tpl = env.get_template("summary.html")
+code_tpl = env.get_template("code_summary.html")

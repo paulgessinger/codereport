@@ -18,7 +18,7 @@
     <tbody>
       {% for code, items in by_code.items() %}
       <tr>
-        <td>{{code}}</td>
+        <td><a href="{{code}}.html#{{srcfile.report_file_name}}">{{code}}</a></td>
         <td>{{ items[0].severity }}</td>
         <td>{{ items|length}}</td>
         <td>
@@ -43,7 +43,7 @@
     <tbody>
       {% for code, items in by_code.items() %}
       <tr>
-        <td>{{code}}</td>
+        <td><a href="{{code}}.html">{{code}}</a></td>
         <td>{{ items[0].severity }}</td>
         <td>{{ items|length}}</td>
         <td>

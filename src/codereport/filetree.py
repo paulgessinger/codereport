@@ -1,11 +1,13 @@
 import os
 
+
 def psplit(p):
     if p.startswith("/"):
         node, other = p[1:].split("/", 1)
         return node, other
     else:
         return p.split("/", 1)
+
 
 class TreeNode:
     def __init__(self, parent=None):
@@ -42,14 +44,13 @@ class TreeNode:
             yield f
 
     def print(self, prefix=""):
-        print(prefix+"-"+self.name)
+        print(prefix + "-" + self.name)
         for _, d in self.subdirs.items():
-            d.print(prefix+" |")
+            d.print(prefix + " |")
         for f in self.files:
-            f.print(prefix+" |")
+            f.print(prefix + " |")
         if not self.is_file:
             print(prefix)
-
 
 
 class FileNode(TreeNode):
@@ -91,6 +92,7 @@ class DirNode(TreeNode):
     def __repr__(self):
         return 'DirNode(name="%s", path="%s")' % (self.name, self.path)
 
+
 class SourceFile:
     def __init__(self, raw_path, items=None, normpath=os.path.normpath):
         self.raw_path = raw_path
@@ -108,17 +110,26 @@ class SourceFile:
 
     def __repr__(self):
         itstr = "\n\t%s\n" if len(self.items) > 0 else "%s"
-        p = (self.name, self.raw_path, self.path, itstr % ",\n\t".join(map(repr, self.items)))
+        p = (
+            self.name,
+            self.raw_path,
+            self.path,
+            itstr % ",\n\t".join(map(repr, self.items)),
+        )
         return 'SourceFile(name="%s", raw_path="%s", path="%s", items=[%s])' % p
+
+    def __gt__(self, other):
+        return self.path > other.path
 
     @property
     def report_file_name(self):
         p = self.path
         if p.startswith("/"):
             p = p[1:]
-        return p.replace("/", "_")+".html"
+        return p.replace("/", "_") + ".html"
 
-def make_file_tree(files, root_name = "root"):
+
+def make_file_tree(files, root_name="root"):
     # root_name, _ = psplit(files[0].path)
     root = DirNode(root_name)
 
@@ -126,8 +137,8 @@ def make_file_tree(files, root_name = "root"):
         root.attach(f.path, f)
         # parts = psplit(f.path)
         # if len(parts) == 1:
-            # root.attach(parts[0], f)
+        # root.attach(parts[0], f)
         # else:
-            # node, other = parts
-            # root.attach(other, f)
+        # node, other = parts
+        # root.attach(other, f)
     return root

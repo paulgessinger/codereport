@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block body %}
+  <header>
+    <h1><a href="index.html">{{ title }}</a></h1>
+    {% block header %}
+    {% endblock %}
+    <h3>generated at {{ report_created }}</h3>
+  </header>
+
+  {% block main %}
+  {% endblock %}
+  
+<script>
+</script>
+{% endblock %}
