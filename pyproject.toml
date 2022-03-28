@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "codereport"
-version = "0.2.5"
+version = "0.3.0"
 description = "Make annotated code reports"
 authors = ["Paul Gessinger <hello@paulgessinger.com>"]
 license = "MIT"
