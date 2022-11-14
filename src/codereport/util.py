@@ -38,7 +38,15 @@ def report_from_json(
     if len(report_items) == 0:
         raise ValueError("No files found")
 
-    prefix = prefix or os.path.commonprefix([s.path for s in report_items])
+    if len(report_items) == 1:
+        item_path = report_items[0].path
+        if os.path.isfile(item_file):
+            prefix = os.path.dirname(item_path)
+        else:
+            prefix = item_path
+    else:
+        prefix = prefix or os.path.commonprefix([s.path for s in report_items])
+    
 
     cp = CodeReport(
         report_items, rootdir=prefix, title=title, srcfs=srcfs, destfs=destfs

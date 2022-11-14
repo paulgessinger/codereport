@@ -19,10 +19,12 @@ from .filetree import make_file_tree, SourceFile
 
 def _get_lexer(srcfile, raw_content):
     try:
-        lexer = guess_lexer_for_filename(srcfile.path, raw_content)
+        lexer = guess_lexer_for_filename(srcfile.raw_path, raw_content)
     except pygments.util.ClassNotFound:
         if srcfile.path.endswith(".ipp"):
             lexer = CppLexer()
+        else:
+            raise
 
     return lexer
 

@@ -3,6 +3,9 @@ import os
 
 def psplit(p):
     if p.startswith("/"):
+        p = p[1:]
+        if "/" not in p:
+            return p, None
         node, other = p[1:].split("/", 1)
         return node, other
     else:
@@ -26,7 +29,8 @@ class TreeNode:
             node, other = parts
             if not node in self.subdirs:
                 self.subdirs[node] = DirNode(node, parent=self)
-            self.subdirs[node].attach(other, srcfile)
+            if other is not None:
+                self.subdirs[node].attach(other, srcfile)
 
     @property
     def path(self):
@@ -97,6 +101,9 @@ class SourceFile:
     def __init__(self, raw_path, items=None, normpath=os.path.normpath):
         self.raw_path = raw_path
         self.path = normpath(raw_path)
+        if self.path == ".":
+            raise ValueError("what")
+        print(raw_path, "->", self.path)
         self.name = os.path.basename(self.path)
         self.items = items or []
 
