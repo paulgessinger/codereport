@@ -36,7 +36,7 @@ def report_from_json(
     report_items = list(filter(lambda s: os.path.exists(s.path), report_items))
 
     if len(report_items) == 0:
-        raise ValueError("No files found")
+        return
 
     if len(report_items) == 1:
         item_path = report_items[0].path
