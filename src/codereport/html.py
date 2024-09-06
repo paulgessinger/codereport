@@ -10,7 +10,7 @@ class HtmlFormatter(VanillaHtmlFormatter):
         self._get_line_comment = get_line_comment
         super(HtmlFormatter, self).__init__(*args, **kwargs)
 
-    def wrap(self, source, outfile):
+    def wrap(self, source):
         return self._wrap_div(self._wrap_lines(source))
 
     def _wrap_lines(self, source):
