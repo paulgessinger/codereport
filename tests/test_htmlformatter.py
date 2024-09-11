@@ -10,10 +10,9 @@ def test_wrap():
     html_formatter = HtmlFormatter(get_line_comment=get_line_comment_mock)
 
     source = [(1, "LINE_A"), (1, "LINE_B"), (1, "LINE_C")]
-    outfile = "abc.html"
     
     with patch("codereport.templates.line_tpl", tpl_mock):
-        list(html_formatter.wrap(source, outfile))
+        list(html_formatter.wrap(source))
 
     assert tpl_mock.render.call_count == len(source)
     tpl_mock.render.assert_has_calls([
@@ -23,4 +22,3 @@ def test_wrap():
     ])
 
     assert get_line_comment_mock.call_count == len(source)
-
