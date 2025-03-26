@@ -29,6 +29,10 @@ def _get_lexer(srcfile, raw_content):
     return lexer
 
 
+def to_posix_path(path):
+    return Path(str(path)).as_posix()
+
+
 class CodeReport:
     def __init__(
         self,
@@ -65,26 +69,28 @@ class CodeReport:
 
         self._filetree = make_file_tree(self._srcfiles)
 
-        self._destfs.makedir(destdir, recreate=True)
+        # Strip the Windows style path beggining like `C:`, `D:` ect...
+        destdir = re.sub(r"^[a-zA-Z]:", "", destdir)
+        self._destfs.makedir(to_posix_path(destdir), recreate=True)
 
         if True:
             for sf in self._srcfiles:
                 with self._destfs.open(
-                    os.path.join(destdir, sf.report_file_name), "w+"
+                    to_posix_path(os.path.join(destdir, sf.report_file_name)), "w+"
                 ) as f:
                     f.write(self._render_code_file(sf))
 
-            with self._destfs.open(os.path.join(destdir, "index.html"), "w+") as f:
+            with self._destfs.open(to_posix_path(os.path.join(destdir, "index.html")), "w+") as f:
                 f.write(self._render_index())
 
             with self._destfs.open(
-                os.path.join(destdir, "index_summary.html"), "w+"
+                to_posix_path(os.path.join(destdir, "index_summary.html")), "w+"
             ) as f:
                 f.write(self._render_summary(self._items, standalone=True))
 
         kf = lambda i: i.code
         for code, items in itertools.groupby(sorted(self._items, key=kf), kf):
-            with self._destfs.open(os.path.join(destdir, f"{code}.html"), "w+") as f:
+            with self._destfs.open(to_posix_path(os.path.join(destdir, f"{code}.html")), "w+") as f:
                 f.write(self._render_code_summary(code, items))
 
     def _render_code_file(self, srcfile):
