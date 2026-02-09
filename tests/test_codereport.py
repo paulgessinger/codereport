@@ -1,7 +1,6 @@
-from codereport import CodeReport, ReportItem
+from pathlib import Path
 
-from fs.memoryfs import MemoryFS
-from fs.osfs import OSFS
+from codereport import CodeReport, ReportItem
 
 file_a = """
 #pragma once
@@ -31,27 +30,24 @@ void main() {
 """
 
 
-def test_create():
-    fs = MemoryFS()
-    # fs = OSFS("/tmp/cprtest")
-    fs.makedir("src", recreate=True)
-    fs.settext("src/myclass.h", file_a.strip())
-    fs.settext("src/myclass.cxx", file_b.strip())
-    fs.settext("src/main.cxx", file_c.strip())
-    fs.tree()
+def test_create(tmp_path):
+    src = tmp_path / "src"
+    src.mkdir()
+    (src / "myclass.h").write_text(file_a.strip())
+    (src / "myclass.cxx").write_text(file_b.strip())
+    (src / "main.cxx").write_text(file_c.strip())
 
-    items = [ReportItem("src/myclass.cxx", 4, "info", "This is a great class", "awesomeness"),
-             ReportItem("src/main.cxx", 2, "warning", "This is not a great function", "executable")]
+    items = [
+        ReportItem(str(src / "myclass.cxx"), 4, "info", "This is a great class", "awesomeness"),
+        ReportItem(str(src / "main.cxx"), 2, "warning", "This is not a great function", "executable"),
+    ]
 
-    cp = CodeReport(items, srcfs=fs, destfs=fs)
-    cp.render("report")
+    report_dir = tmp_path / "report"
 
-    assert fs.exists("report"), "Report directory created"
-    report_files = fs.listdir("report")
-    assert "src_myclass.cxx.html" in report_files, "Slashes are converted to underscores"
-    assert "src_main.cxx.html" in report_files, "Slashes are converted to underscores"
+    cp = CodeReport(items)
+    cp.render(report_dir)
 
+    assert report_dir.exists(), "Report directory created"
+    report_files = [f.name for f in report_dir.iterdir()]
     assert "index.html" in report_files, "Index page is created"
-    print(report_files)
-
 

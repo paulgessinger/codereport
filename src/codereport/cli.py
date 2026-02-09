@@ -1,15 +1,13 @@
 import argparse
-import json
-import os
+from pathlib import Path
 
-from codereport import CodeReport, ReportItem
 from codereport.util import report_from_json
 
 
 def main():
     p = argparse.ArgumentParser(description="Generate a code report")
     p.add_argument("item_file", help="JSON file to take items from")
-    p.add_argument("dest", help="Destionation folder for the report")
+    p.add_argument("dest", help="Destination folder for the report")
     p.add_argument(
         "--map-dir", action="append", default=[], type=lambda s: s.split(":")
     )
@@ -26,8 +24,8 @@ def main():
         return p
 
     report_from_json(
-        os.path.abspath(args.item_file),
-        os.path.abspath(args.dest),
+        Path(args.item_file).resolve(),
+        Path(args.dest).resolve(),
         args.title,
         prefix=args.prefix,
         path_resolver=path_resolver,

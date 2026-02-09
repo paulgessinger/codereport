@@ -10,7 +10,6 @@ from pygments.lexers.c_cpp import CppLexer
 from pygments.lexers import guess_lexer_for_filename
 import itertools
 from collections import OrderedDict
-from fs.osfs import OSFS
 
 from .html import HtmlFormatter, get_style
 from .templates import *
@@ -29,30 +28,32 @@ def _get_lexer(srcfile, raw_content):
     return lexer
 
 
-def to_posix_path(path):
-    return Path(str(path)).as_posix()
-
-
 class CodeReport:
     def __init__(
         self,
         items,
         encoding="utf-8",
         title="Code Report",
-        srcfs=OSFS("/"),
-        destfs=OSFS("/"),
+        srcdir=None,
         rootdir="/",
     ):
         self._items = items
         self._title = title
         self._encoding = encoding
-        self._srcfs = srcfs
-        self._destfs = destfs
+        self._srcdir = Path(srcdir) if srcdir is not None else None
         self._rootdir = rootdir
 
         self._srcfiles = []
 
+    def _resolve_src(self, relpath):
+        """Resolve a source file path, optionally relative to srcdir."""
+        if self._srcdir is not None:
+            return self._srcdir / relpath
+        return Path(relpath)
+
     def render(self, destdir):
+        destdir = Path(destdir)
+
         kf = lambda i: os.path.normpath(i.path)
         for file, items in itertools.groupby(sorted(self._items, key=kf), kf):
             items = list(items)
@@ -69,33 +70,32 @@ class CodeReport:
 
         self._filetree = make_file_tree(self._srcfiles)
 
-        # Strip the Windows style path beggining like `C:`, `D:` ect...
-        destdir = re.sub(r"^[a-zA-Z]:", "", destdir)
-        self._destfs.makedir(to_posix_path(destdir), recreate=True)
+        destdir.mkdir(parents=True, exist_ok=True)
 
-        if True:
-            for sf in self._srcfiles:
-                with self._destfs.open(
-                    to_posix_path(os.path.join(destdir, sf.report_file_name)), "w+"
-                ) as f:
-                    f.write(self._render_code_file(sf))
+        for sf in self._srcfiles:
+            (destdir / sf.report_file_name).write_text(
+                self._render_code_file(sf), encoding=self._encoding
+            )
 
-            with self._destfs.open(to_posix_path(os.path.join(destdir, "index.html")), "w+") as f:
-                f.write(self._render_index())
+        (destdir / "index.html").write_text(
+            self._render_index(), encoding=self._encoding
+        )
 
-            with self._destfs.open(
-                to_posix_path(os.path.join(destdir, "index_summary.html")), "w+"
-            ) as f:
-                f.write(self._render_summary(self._items, standalone=True))
+        (destdir / "index_summary.html").write_text(
+            self._render_summary(self._items, standalone=True),
+            encoding=self._encoding,
+        )
 
         kf = lambda i: i.code
         for code, items in itertools.groupby(sorted(self._items, key=kf), kf):
-            with self._destfs.open(to_posix_path(os.path.join(destdir, f"{code}.html")), "w+") as f:
-                f.write(self._render_code_summary(code, items))
+            (destdir / f"{code}.html").write_text(
+                self._render_code_summary(code, items), encoding=self._encoding
+            )
 
     def _render_code_file(self, srcfile):
-        with self._srcfs.open(srcfile.raw_path, "r") as fh:
-            raw_content = fh.read()
+        raw_content = self._resolve_src(srcfile.raw_path).read_text(
+            encoding=self._encoding
+        )
 
         lexer = _get_lexer(srcfile, raw_content)
 
@@ -155,8 +155,9 @@ class CodeReport:
                 )
                 return "\n\n".join(map(str, items))
 
-            with self._srcfs.open(srcfile.raw_path, "rt") as fh:
-                raw_content = fh.read()
+            raw_content = self._resolve_src(srcfile.raw_path).read_text(
+                encoding=self._encoding
+            )
             lexer = _get_lexer(srcfile, raw_content)
             lines = raw_content.split("\n")
 
